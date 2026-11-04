@@ -37,6 +37,7 @@ const sfx = {
   bad() { tone(180, 0.1, 'square', 0.04); },
   undo() { tone(420, 0.08, 'triangle', 0.04, -140); },
 };
+const vibe = (p) => { try { if (window.arcadeVibe) window.arcadeVibe(p); } catch (_) {} };   // 진동: 로비의 진동 설정을 따른다
 function toggleMute() { muted = !muted; store.set('pinpullMuted', muted ? '1' : '0'); $('muteBtn').textContent = muted ? '🔇' : '🔊'; }
 $('muteBtn').textContent = muted ? '🔇' : '🔊';
 
@@ -147,8 +148,8 @@ function update(dt) {
   while (G.events.length) {
     const ev = G.events.shift();
     if (ev.type === 'star') sfx.star();
-    else if (ev.type === 'win') { sfx.win(); tutorialSignal('win'); onWin(); }
-    else if (ev.type === 'dead') { sfx.dead(); tutorialSignal('dead'); msg = WHY[ev.why] || '실패'; msgT = 2; finishT = 0.9; }
+    else if (ev.type === 'win') { sfx.win(); vibe([30, 30, 60]); tutorialSignal('win'); onWin(); }
+    else if (ev.type === 'dead') { sfx.dead(); vibe([80, 40, 80]); tutorialSignal('dead'); msg = WHY[ev.why] || '실패'; msgT = 2; finishT = 0.9; }
   }
   if (G.over && !G.win && finishT > 0) { finishT -= dt; if (finishT <= 0) showFail(); }
   if (G.settled) syncBar();
