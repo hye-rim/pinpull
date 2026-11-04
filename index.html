@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>핀 뽑기 퍼즐</title>
+<style>
+  *, *::before, *::after { -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { width:100%; height:100%; overflow:hidden; background:#1b1626; color:#fff; touch-action:none;
+    font-family:-apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
+  #stage { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+  #wrap { position:relative; background:#000; }
+  #game { display:block; touch-action:none; border-radius:8px; }
+  #bar { position:absolute; left:0; right:0; bottom:0; height:12%; z-index:5; display:flex; gap:8px; align-items:center; justify-content:center; padding:0 10px; background:linear-gradient(0deg,rgba(14,10,22,.96),rgba(14,10,22,.6)); border-radius:0 0 8px 8px; }
+  #bar.hidden { display:none; }
+  #bar button { flex:1; height:74%; border-radius:14px; font-size:14px; font-weight:900; color:#fff; background:rgba(255,255,255,.14); border:2px solid rgba(255,255,255,.3); cursor:pointer; }
+  #bar button:disabled { opacity:.35; }
+  #top { position:absolute; right:6px; top:6px; display:flex; gap:6px; z-index:7; }
+  #top button { position:relative; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.3); color:#fff; width:32px; height:32px; border-radius:8px; font-size:14px; cursor:pointer; }
+  #top button::after { content:''; position:absolute; inset:-6px -3px; }
+  #overlay { position:absolute; inset:0; z-index:6; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; padding:14px; background:rgba(20,14,34,.93); border-radius:8px; }
+  #overlay.hidden { display:none; }
+  #overlay.clear { background:rgba(20,14,34,.6); }
+  #overlay h1 { font-size:38px; font-weight:900; color:#ffcf6a; text-shadow:0 3px 0 #7a3a00; line-height:1.15; }
+  #overlay h2 { font-size:26px; font-weight:900; }
+  #overlay p { font-size:13px; color:#ece4f6; line-height:1.6; }
+  #overlay .big { font-size:30px; letter-spacing:4px; }
+  #overlay .help { font-size:12px; color:#c4b8d8; line-height:1.7; }
+  #overlay .note { font-size:11px; color:#a899c0; }
+  #overlay button { margin-top:6px; background:linear-gradient(180deg,#ffe3a0,#f0a630); color:#3a1a00; font-weight:900; font-size:17px; border:none; border-radius:999px; padding:12px 30px; box-shadow:0 4px 0 #9a6410; cursor:pointer; }
+  #overlay button:active { transform:translateY(3px); box-shadow:0 1px 0 #9a6410; }
+  #overlay button.sub { background:rgba(255,255,255,.14); color:#fff; box-shadow:none; font-size:14px; padding:9px 22px; border:2px solid rgba(255,255,255,.3); }
+  #overlay .row { display:flex; gap:8px; }
+  #overlay .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; width:100%; max-width:300px; }
+  #overlay .grid button { margin:0; padding:8px 0 6px; font-size:20px; border-radius:14px; box-shadow:0 3px 0 #9a6410; line-height:1.1; }
+  #overlay .grid button small { display:block; font-size:11px; letter-spacing:1px; color:#b8741a; font-weight:900; min-height:13px; }
+  #overlay .grid button.lock { background:rgba(255,255,255,.1); color:#8a7fa0; box-shadow:none; }
+  #overlay .grid button.lock small { color:transparent; }
+  .pc { display:inline; } .touch { display:none; }
+  @media (pointer:coarse) { .pc { display:none; } .touch { display:inline; } }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wrap">
+    <canvas id="game" width="360" height="640"></canvas>
+    <div id="top"><button id="muteBtn" title="소리 (M)">🔊</button><button id="menuBtn" title="단계 고르기">☰</button></div>
+    <div id="bar" class="hidden"><button id="btnReset">↺ 처음부터</button><button id="btnUndo">↶ 되돌리기</button><button id="btnHint">💡 힌트</button></div>
+    <div id="overlay"></div>
+  </div>
+</div>
+<script src="logic.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
